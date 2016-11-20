@@ -1,5 +1,7 @@
 FROM java:8
 
+ENV APIXU_KEY ${apixu_key}
+
 # Install maven
 RUN apt-get update
 RUN apt-get install -y maven
@@ -16,4 +18,4 @@ ADD src /code/src
 RUN ["mvn", "package"]
 
 EXPOSE 4567
-CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-jar", "target/sparkexample-jar-with-dependencies.jar"]
+CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-jar", "target/my-first-spark-app-1.0-jar-with-dependencies.jar"]
