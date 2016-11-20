@@ -1,25 +1,21 @@
 import DTO.Current;
-import DTO.Location;
+
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import org.json.JSONObject;
+import java.io.FileNotFoundException;
 
-import java.util.Map;
 
 import static spark.Spark.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Map<String, String> env = System.getenv();
-        //i know apixu has it's lib
-        //TODO simple service manager
-        //TODO weaterApi as service + interface
-        //TODO some transfer and data objects
+    public static void main(String[] args) throws FileNotFoundException{
+        Config cfg = Config.Instance();
         String weatherApiUrlPattern = "http://api.apixu.com/v1/current.json";
-        String key = env.get("APIXU_KEY");
+        String key = cfg.getApixuKey();
         //aww how to log properly TODO
         System.out.println("apixu key: "+key);
 
