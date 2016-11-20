@@ -15,6 +15,9 @@ public class Main {
     public static void main(String[] args) {
         Map<String, String> env = System.getenv();
         //i know apixu has it's lib
+        //TODO simple service manager
+        //TODO weaterApi as service + interface
+        //TODO some transfer and data objects
         String weatherApiUrlPattern = "http://api.apixu.com/v1/current.json";
         String key = env.get("APIXU_KEY");
         //aww how to log properly TODO
