@@ -1,21 +1,13 @@
-import DTO.Current;
-
-import com.google.gson.Gson;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
-import java.util.logging.Logger;
+import spark.Request;
+import spark.Response;
 
 
 import static spark.Spark.*;
 
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException {
-        String weatherApiUrlPattern = "http://api.apixu.com/v1/current.json";
+    public static void main(String[] args){
+        //CONFIG
         String key = System.getenv("APIXU_KEY");
         if (key == null) {
             System.out.println("APIXU_KEY env not present");
@@ -23,42 +15,40 @@ public class Main {
         }
         //aww how to log properly TODO
         System.out.println("apixu key: " + key);
+        //services would need some nice and fancy DI here
 
-        get("/weather/:city", (req, res) -> {
-            String city = req.params("city");
-            if (city == null) {
-                halt(400, "No city given");
-            }
+        //SERVICES (isn't that called in java world beans? need to check that out)
+        WeatherService weatherService = new WeatherService(key);
 
-            HttpResponse<JsonNode> weatherJsonResponse = Unirest.get(weatherApiUrlPattern)
-                    .queryString("key", key)
-                    .queryString("q", city)
-                    .asJson(); //no need for async here
+        /**
+         * Does creating bigger controllers have sense?
+         * if i want controllers and many endpoints I should go spring instead shouldn't I
+         */
+        //ROUTER
+        get("/weather/:city", (req, res) 
+                -> getWeatherHandler(req, res, weatherService), JsonUtil::toJson);
+        
+        get("/TODO_SOME_PAGE_TO_CONSUME_THE_API", (req, res) -> "I'm so lazyyy ;)");
+    }
 
-            JSONObject weatherJson = weatherJsonResponse.getBody().getObject();
-
-
-            if (weatherJson.has("error")) {
-                int code = weatherJson.getJSONObject("error").getInt("code");
-                switch (code) {
-                    case 1006:
-                        halt(404, "No location found");
-                        break;
-                    case 2006:
-                    case 2007:
-                    case 2008:
-                        halt(500, "Problem with api key");
-                        break;
-                }
-            }
-
-            //could to that in fly but that way i'd skip some learning
-
-            Gson gson = new Gson();
-            Current current = gson.fromJson(weatherJson.getJSONObject("current").toString(), Current.class);
-            return "siema  -> " + current.toString();
-            /**/
-
-        });
+    //HANDLERS
+    private static WeatherInfo getWeatherHandler(Request req, Response res, WeatherService weatherService){
+        String city = req.params("city");
+        if (city == null) {
+            halt(400, "No city given");
+        }
+        try {
+            WeatherInfo weatherInfo = weatherService.getWeatherFor(city);
+            return weatherInfo;
+        }
+        catch(WeatherServiceException e){
+            System.out.println("Weather service exception");
+            halt(400, e.getMessage());
+            return null;
+        }
+        catch (Exception e){
+            halt(500, e.getMessage());
+            return null;
+        }
     }
 }
