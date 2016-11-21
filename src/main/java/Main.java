@@ -38,8 +38,7 @@ public class Main {
             halt(400, "No city given");
         }
         try {
-            WeatherInfo weatherInfo = weatherService.getWeatherFor(city);
-            return weatherInfo;
+            return weatherService.getWeatherFor(city);
         }
         catch(WeatherServiceException e){
             System.out.println("Weather service exception");

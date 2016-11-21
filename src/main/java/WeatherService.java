@@ -11,11 +11,10 @@ import static java.awt.SystemColor.info;
 /**
  * Created by Memfis on 2016-11-21.
  */
+@SuppressWarnings("WeakerAccess")
 public class WeatherService {
 
-    private String apiKey;
-
-    private String weatherApiUrlPattern = "http://api.apixu.com/v1/current.json";
+    private final String apiKey;
 
     public WeatherService(String apiKey){
         this.apiKey = apiKey;
@@ -54,7 +53,8 @@ public class WeatherService {
     protected JSONObject getData(String city) throws Exception{
         HttpResponse<JsonNode> weatherJsonResponse; //no need for async here
         try {
-            weatherJsonResponse = Unirest.get(this.weatherApiUrlPattern)
+            String weatherApiUrlPattern = "http://api.apixu.com/v1/current.json";
+            weatherJsonResponse = Unirest.get(weatherApiUrlPattern)
                     .queryString("key", this.apiKey)
                     .queryString("q", city)
                     .asJson();
