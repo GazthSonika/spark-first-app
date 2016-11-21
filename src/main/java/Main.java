@@ -5,19 +5,24 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 
 
 import static spark.Spark.*;
 
 public class Main {
 
-    public static void main(String[] args) throws FileNotFoundException{
-        Config cfg = Config.Instance();
+    public static void main(String[] args) throws FileNotFoundException {
         String weatherApiUrlPattern = "http://api.apixu.com/v1/current.json";
-        String key = cfg.getApixuKey();
+        String key = System.getenv("APIXU_KEY");
+        if (key == null) {
+            System.out.println("APIXU_KEY env not present");
+            System.exit(1);
+        }
         //aww how to log properly TODO
-        System.out.println("apixu key: "+key);
+        System.out.println("apixu key: " + key);
 
         get("/weather/:city", (req, res) -> {
             String city = req.params("city");
@@ -49,9 +54,9 @@ public class Main {
 
             //could to that in fly but that way i'd skip some learning
 
-             Gson gson = new Gson();
-             Current current = gson.fromJson(weatherJson.getJSONObject("current").toString(), Current.class);
-             return "siema  -> "+current.toString();
+            Gson gson = new Gson();
+            Current current = gson.fromJson(weatherJson.getJSONObject("current").toString(), Current.class);
+            return "siema  -> " + current.toString();
             /**/
 
         });
