@@ -18,6 +18,7 @@ public class Main {
         //services would need some nice and fancy DI here
 
         //SERVICES (isn't that called in java world beans? need to check that out)
+        //Are there any nice DI or all glory to hypnoSPRING :D
         WeatherService weatherService = new WeatherService(key);
 
         /**
@@ -28,7 +29,7 @@ public class Main {
         get("/weather/:city", (req, res) 
                 -> getWeatherHandler(req, res, weatherService), JsonUtil::toJson);
         
-        get("/TODO_SOME_PAGE_TO_CONSUME_THE_API", (req, res) -> "I'm so lazyyy ;)");
+        get("/TODO_SOME_PAGE_TO_CONSUME_THE_API", (req, res) -> "I'm so lazyyy right now ;)");
     }
 
     //HANDLERS

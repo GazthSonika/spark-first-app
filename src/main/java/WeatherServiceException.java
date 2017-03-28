@@ -25,6 +25,4 @@ public class WeatherServiceException extends Exception {
         return "Unknown Error";
     }
 
-    //can really do here map of http codes will that make exception http only?
-
 }
