@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS `spark-test-app` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS `spark-test-app`.`cities` (
+   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+   `city` TEXT NOT NULL ,
+   `temp` DECIMAL NOT NULL , PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+ALTER TABLE `spark-test-app`.`cities` ADD `date_add` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `temp`;

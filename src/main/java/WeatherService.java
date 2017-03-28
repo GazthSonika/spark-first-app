@@ -1,12 +1,8 @@
-import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONObject;
-
-import static java.awt.SystemColor.info;
-
 
 /**
  * Created by Memfis on 2016-11-21.
@@ -44,7 +40,7 @@ public class WeatherService {
 
         //extracting i know i could use some advanced mapper but it's just for learning purposes
         //will add more latter
-        weatherInfo.setTemperatureC(info.getDouble("temp_c"));
+        weatherInfo.setTemperatureC(info.getDouble("temp_c")); //any automaping tools?
         weatherInfo.setTemperatureF(info.getDouble("temp_f"));
 
         return weatherInfo;
@@ -68,7 +64,7 @@ public class WeatherService {
 
     /**
      * 0 if success 1+ if failed
-     * @param weatherJson
+     * @param  JSONObject weatherJson
      * @return int error code
      */
     protected int getErrorCode(JSONObject weatherJson) {
